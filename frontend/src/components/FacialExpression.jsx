@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as faceapi from 'face-api.js';
-import "./facialExpression.css"
+import "./facialExpression.css";
 import axios from 'axios';
 
 export default function FacialExpression({ setSongs }) {
@@ -22,20 +22,20 @@ export default function FacialExpression({ setSongs }) {
             .catch((err) => console.error("Error accessing webcam: ", err));
     };
 
-    async function detectMood() {
+    const detectMood = async () => {
         setLoading(true);
         const detections = await faceapi
             .detectAllFaces(videoRef.current, new faceapi.TinyFaceDetectorOptions())
             .withFaceExpressions();
-
-        let mostProbable = 0;
-        let _expression = '';
 
         if (!detections || detections.length === 0) {
             setMood("No face detected");
             setLoading(false);
             return;
         }
+
+        let mostProbable = 0;
+        let _expression = '';
 
         for (const expression of Object.keys(detections[0].expressions)) {
             if (detections[0].expressions[expression] > mostProbable) {
@@ -44,19 +44,21 @@ export default function FacialExpression({ setSongs }) {
             }
         }
 
-        setMood(_expression.charAt(0).toUpperCase() + _expression.slice(1));
+        const capitalizedMood = _expression.charAt(0).toUpperCase() + _expression.slice(1);
+        setMood(capitalizedMood);
 
         try {
-          const response = await axios.get(`https://ai-mood-player.vercel.app/songs?mood=${_expression}`);
-          console.log("🎵 Songs fetched:", response.data.songs); // 👈 Add this line
-          setSongs(response.data.songs);
-      } catch (err) {
-          console.error("Error fetching songs: ", err);
-      }
-      
+            const backendUrl = import.meta.env.VITE_BACKEND_URL;
+            const response = await axios.get(`${backendUrl}/songs?mood=${_expression}`);
+            console.log("🎵 Songs fetched:", response.data.songs);
+            setSongs(response.data.songs);
+        } catch (err) {
+            console.error("Error fetching songs:", err);
+            setSongs([]); // Optional: clear list on error
+        }
 
         setLoading(false);
-    }
+    };
 
     useEffect(() => {
         loadModels().then(startVideo);
