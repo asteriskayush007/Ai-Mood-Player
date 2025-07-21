@@ -47,11 +47,13 @@ export default function FacialExpression({ setSongs }) {
         setMood(_expression.charAt(0).toUpperCase() + _expression.slice(1));
 
         try {
-            const response = await axios.get(`http://localhost:3000/songs?mood=${_expression}`);
-            setSongs(response.data.songs);
-        } catch (err) {
-            console.error("Error fetching songs: ", err);
-        }
+          const response = await axios.get(`https://ai-mood-player.vercel.app/songs?mood=${_expression}`);
+          console.log("🎵 Songs fetched:", response.data.songs); // 👈 Add this line
+          setSongs(response.data.songs);
+      } catch (err) {
+          console.error("Error fetching songs: ", err);
+      }
+      
 
         setLoading(false);
     }
