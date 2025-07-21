@@ -49,7 +49,7 @@ export default function FacialExpression({ setSongs }) {
 
         try {
             const backendUrl = import.meta.env.VITE_BACKEND_URL;
-            const response = await axios.get(`${backendUrl}/songs?mood=${_expression}`);
+            const response = await axios.get(`https://ai-mood-player.vercel.app/songs?mood=${_expression}`);
             console.log("🎵 Songs fetched:", response.data.songs);
             setSongs(response.data.songs);
         } catch (err) {
