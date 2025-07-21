@@ -40,26 +40,15 @@ router.post('/songs', upload.single("audio"), async (req, res) => {
 router.get('/songs', async (req, res) => {
     try {
         const { mood } = req.query;
+        if (!mood) return res.status(400).json({ error: "Mood query is required" });
 
-        if (!mood) {
-            return res.status(400).json({ message: "❗ Mood query parameter is required" });
-        }
-
-        console.log("🔍 Fetching songs for mood:", mood);
-
-        const songs = await songModel.find({
-            mood: { $regex: new RegExp(mood, 'i') }  // Case insensitive
-        });
-
-        res.status(200).json({
-            message: "✅ Songs fetched successfully",
-            songs
-        });
-
+        const songs = await songModel.find({ mood });
+        res.status(200).json({ message: "Songs fetched", songs });
     } catch (err) {
-        console.error("❌ Error in GET /songs:", err);
-        res.status(500).json({ message: "Internal Server Error", error: err.message });
+        console.error("Song fetch error:", err);
+        res.status(500).json({ error: "Server Error" });
     }
 });
+
 
 module.exports = router;
