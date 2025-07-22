@@ -1,11 +1,10 @@
 require('dotenv').config();
-
-const app = require('./src/app'); // ✅ Express app
+const app = require('./src/app');
+const cors = require('cors');
 const connectDB = require('./src/db/db');
 
-// ❌ Do not repeat `cors()` here if already in app.js
+app.use(cors());
 
-// ✅ Health check route — good!
 app.get('/', (req, res) => {
   res.send({
     activeStatus: true,
@@ -13,11 +12,14 @@ app.get('/', (req, res) => {
   });
 });
 
-// ✅ Connect to MongoDB
-connectDB();
-
-// ✅ Start the server on dynamic port for Vercel (IMPORTANT!)
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`🚀 Server is running on port ${PORT}`);
-});
+// ✅ Add try-catch to catch DB errors and log properly
+(async () => {
+  try {
+    await connectDB(); // connect to MongoDB
+    app.listen(3000, () => {
+      console.log("🚀 Server is running on port 3000");
+    });
+  } catch (err) {
+    console.error("❌ Failed to start server:", err.message);
+  }
+})();
