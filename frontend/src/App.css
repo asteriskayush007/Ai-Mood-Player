@@ -1,0 +1,42 @@
+/* GLOBAL */
+.app {
+background: #0f0f0f;
+min-height: 100vh;
+color: white;
+font-family: 'Inter', system-ui;
+padding: 2rem;
+}
+
+/* HERO SECTION */
+.hero {
+text-align: center;
+margin-bottom: 3rem;
+}
+
+.hero h1 {
+font-size: 2.8rem;
+font-weight: 700;
+margin-bottom: 1rem;
+background: linear-gradient(90deg, #6e6eff, #babbff);
+-webkit-background-clip: text;
+color: transparent;
+}
+
+.hero p {
+font-size: 1.1rem;
+color: #ccc;
+}
+
+/* CONTENT GRID */
+.content-grid {
+display: grid;
+gap: 2rem;
+grid-template-columns: 1fr;
+}
+
+/* On Desktop */
+@media (min-width: 900px) {
+.content-grid {
+grid-template-columns: 400px 1fr;
+}
+}
