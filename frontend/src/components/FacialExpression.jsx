@@ -48,7 +48,7 @@ export default function FacialExpression({ setSongs }) {
         setMood(capitalizedMood);
 
         try {
-            const response = await axios.get(`https://ai-mood-player.onrender.com/songs?mood=${_expression}`);
+            const response = await axios.get(`http://localhost:3000/songs?mood=${_expression}`);
             console.log("🎵 Songs fetched:", response.data.songs);
             setSongs(response.data.songs);
         } catch (err) {
